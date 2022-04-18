@@ -1,14 +1,14 @@
 {
-	"name": "app-name",
-	"productName": "App Name",
-	"version": "0.0.0",
-	"description": "The best app ever",
+	"name": "whatsapp-caller",
+	"productName": "WhatsApp Caller",
+	"version": "0.1.0",
+	"description": "Electron app to use tel: links with WhatsApp",
 	"license": "MIT",
-	"repository": "sindresorhus/electron-boilerplate",
+	"repository": "lucasff/electron-whatsapp-caller",
 	"author": {
-		"name": "Your Name",
-		"email": "user@gmail.com",
-		"url": "https://sindresorhus.com"
+		"name": "Lucas Freitas",
+		"email": "lucas@lucasfreitas.me",
+		"url": "https://lucasfreitas.me"
 	},
 	"scripts": {
 		"postinstall": "electron-builder install-app-deps",
@@ -22,14 +22,15 @@
 	"dependencies": {
 		"electron-context-menu": "^3.0.0",
 		"electron-debug": "^3.2.0",
-		"electron-store": "^8.0.0",
-		"electron-unhandled": "^3.0.2",
-		"electron-updater": "^4.3.8",
-		"electron-util": "^0.15.1"
+		"electron-store": "^8.0.1",
+		"electron-unhandled": "^4.0.1",
+		"electron-updater": "^5.0.1",
+		"electron-util": "^0.17.2",
+		"rage-edit": "^1.2.0"
 	},
 	"devDependencies": {
-		"electron": "^12.0.6",
-		"electron-builder": "^22.10.5",
+		"electron": "^18.0.4",
+		"electron-builder": "^23.0.6",
 		"np": "^7.5.0",
 		"xo": "^0.39.1"
 	},
@@ -44,7 +45,7 @@
 		"releaseDraft": false
 	},
 	"build": {
-		"appId": "com.company.AppName",
+		"appId": "me.lucasfreitas.WhatsAppCaller",
 		"mac": {
 			"category": "public.app-category.social-networking",
 			"darkModeSupport": true
