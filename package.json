@@ -1,7 +1,7 @@
 {
   "name": "whatsapp-caller",
   "productName": "WhatsApp Caller",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Electron app to use tel: links with WhatsApp",
   "license": "MIT",
   "repository": "lucasff/electron-whatsapp-caller",

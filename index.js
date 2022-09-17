@@ -95,8 +95,11 @@ const parseNumberManual = (number) => {
 };
 
 const parseNumber = (number) => {
-  const tryWithDE = parsePhoneNumber(number, "DE");
-  const tryWithBR = parsePhoneNumber(number, "BR");
+  let cleanNumber = String(number).trim();
+  cleanNumber = cleanNumber.replace(/^(tel|callto):/g, "");
+  cleanNumber = cleanNumber.replace(/(%20|%32|%43|%45)/g, "");
+  const tryWithDE = parsePhoneNumber(cleanNumber, "DE");
+  const tryWithBR = parsePhoneNumber(cleanNumber, "BR");
   if (tryWithDE.isValid() && tryWithDE.getType() === 'MOBILE') {
     return String(tryWithDE.number).replace('+', '')
   }
