@@ -109,7 +109,8 @@ const parseNumber = (number) => {
 };
 
 app.on("open-url", async (event, url) => {
-  await handleWhatsAppLink(mainWindow, parseNumber(url));
+  const number = parseNumber(url);
+  const status = await handleWhatsAppLink(mainWindow, number);
   app.quit();
 });
 
@@ -122,19 +123,23 @@ autoUpdater.on("update-downloaded", (info) => {
 });
 
 const handleWhatsAppLink = async (win, phoneNumber) => {
-  if (protocol.isProtocolRegistered("whatsapp")) {
-    await shell.openExternal(`whatsapp://send?phone=${phoneNumber}`);
+  const isProtocolRegistered = protocol.isProtocolRegistered("whatsapp");
+  if (isProtocolRegistered) {
+    return await shell.openExternal(`whatsapp://send?phone=${phoneNumber}`);
   } else {
-    shell.openExternal(`https://api.whatsapp.com/send/?phone=${phoneNumber}`);
+    return await shell.openExternal(`https://api.whatsapp.com/send/?phone=${phoneNumber}`);
   }
 };
 
-const noop = (request, callback) => {};
+const noop = (request, callback) => {
+  console.log(request);
+};
 
 (async () => {
   await app.whenReady();
   protocol.registerStringProtocol("callto", noop);
   protocol.registerStringProtocol("tel", noop);
+  // If we are running a non-packaged version of the app && on windows
   Menu.setApplicationMenu(menu);
   mainWindow = await createMainWindow();
 })();
