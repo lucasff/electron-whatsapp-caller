@@ -12,6 +12,7 @@
     "url": "https://lucasfreitas.me"
   },
   "scripts": {
+    "tauri": "tauri",
     "dev": "tauri dev",
     "build": "tauri build",
     "test": "cargo test --manifest-path src-tauri/Cargo.toml --lib",
