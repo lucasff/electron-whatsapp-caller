@@ -1,8 +1,21 @@
-# WhatsApp Caller
+<p align="center">
+  <img src="assets/logo.svg" width="128" height="128" alt="WhatsApp Caller logo">
+</p>
 
-> An app to open any phone link (tel: and callto:) in any website in WhatsApp.
+<h1 align="center">WhatsApp Caller</h1>
+
+<p align="center">
+  Open any <code>tel:</code> or <code>callto:</code> link from any website in WhatsApp.
+</p>
+
+<p align="center">
+  <a href="https://github.com/lucasff/electron-whatsapp-caller/actions/workflows/ci.yml"><img src="https://github.com/lucasff/electron-whatsapp-caller/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/lucasff/electron-whatsapp-caller/releases/latest"><img src="https://img.shields.io/github/v/release/lucasff/electron-whatsapp-caller" alt="Latest release"></a>
+  <a href="license"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license"></a>
+</p>
 
 Built with [Tauri](https://tauri.app) (Rust). The app is ~5 MB and has no window.
+It opens only to start WhatsApp, then exits.
 
 ## Install
 
@@ -83,4 +96,5 @@ Releases are built by GitHub Actions: push a `v*` tag to get a draft release wit
 
 ## Credits
 
-Built with [Tauri](https://tauri.app).
+Built with [Tauri](https://tauri.app). The logo is in [`assets/logo.svg`](assets/logo.svg);
+regenerate the app icons with `npx tauri icon <1024px png>`.
