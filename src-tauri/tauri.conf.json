@@ -28,7 +28,7 @@
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": ["tel", "callto"]
+        "schemes": ["tel", "callto", "whatsapp"]
       }
     }
   }

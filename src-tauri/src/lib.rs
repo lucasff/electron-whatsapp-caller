@@ -26,7 +26,7 @@ const LINK_GRACE_PERIOD: Duration = Duration::from_secs(2);
 fn handle_link(app: &AppHandle, config_path: &PathBuf, link: &str) {
     let config = Config::load(config_path);
     match phone::parse_number(link, &config.country_codes) {
-        Some(number) => launcher::open_chat(app, &config, &number),
+        Some(number) => launcher::open_chat(app, &config, &number, phone::is_whatsapp_scheme(link)),
         None => eprintln!("No valid phone number in link: {link}"),
     }
 }

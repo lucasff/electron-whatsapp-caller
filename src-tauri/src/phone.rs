@@ -5,6 +5,10 @@ use rlibphonenumber::{PhoneNumber, PhoneNumberFormat, Region};
 /// `tel:` / `callto:` link, or `None` when the link holds no valid number.
 pub fn parse_number(link: &str, country_codes: &[String]) -> Option<String> {
     let link = link.trim();
+    if let Some(phone) = whatsapp_phone(link) {
+        // WhatsApp links hold the international number without "+".
+        return parse_with(None, &format!("+{phone}"));
+    }
     let rest = strip_scheme(link);
     let decoded = percent_decode_str(rest).decode_utf8_lossy();
 
@@ -29,6 +33,50 @@ pub fn parse_number(link: &str, country_codes: &[String]) -> Option<String> {
         let region = code.to_uppercase().parse::<Region>().ok()?;
         parse_with(Some(region), &cleaned)
     })
+}
+
+/// True for `whatsapp:` links, which this app can also own as the handler.
+pub fn is_whatsapp_scheme(link: &str) -> bool {
+    link.trim()
+        .get(..9)
+        .is_some_and(|scheme| scheme.eq_ignore_ascii_case("whatsapp:"))
+}
+
+/// Extracts the digits of the number from `whatsapp://send?phone=`,
+/// `https://api.whatsapp.com/send?phone=`, `https://web.whatsapp.com/send?phone=`
+/// and `https://wa.me/<number>` links.
+fn whatsapp_phone(link: &str) -> Option<String> {
+    let lower = link.to_ascii_lowercase();
+    let rest = lower
+        .strip_prefix("whatsapp://")
+        .or_else(|| lower.strip_prefix("whatsapp:"))
+        .map(|rest| ("send", rest))
+        .or_else(|| {
+            let rest = lower
+                .strip_prefix("https://")
+                .or_else(|| lower.strip_prefix("http://"))?;
+            let (host, path) = rest.split_once('/').unwrap_or((rest, ""));
+            match host {
+                "api.whatsapp.com" | "web.whatsapp.com" => Some(("send", path)),
+                "wa.me" => Some(("wa.me", path)),
+                _ => None,
+            }
+        })?;
+
+    let (kind, rest) = rest;
+    let (path, query) = rest.split_once('?').unwrap_or((rest, ""));
+    let raw = if kind == "wa.me" {
+        percent_decode_str(path.trim_matches('/'))
+            .decode_utf8_lossy()
+            .into_owned()
+    } else {
+        let value = query
+            .split('&')
+            .find_map(|pair| pair.strip_prefix("phone="))?;
+        percent_decode_str(value).decode_utf8_lossy().into_owned()
+    };
+    let digits: String = raw.chars().filter(char::is_ascii_digit).collect();
+    (!digits.is_empty()).then_some(digits)
 }
 
 fn strip_scheme(link: &str) -> &str {
@@ -115,6 +163,44 @@ mod tests {
             parse_number("tel:+4915112345678;ext=12", &de_br()).as_deref(),
             Some("4915112345678")
         );
+    }
+
+    #[test]
+    fn parses_whatsapp_links() {
+        for link in [
+            "whatsapp://send?phone=491630014758",
+            "whatsapp://send/?phone=491630014758&text=hi",
+            "WhatsApp://send?text=hi&phone=%2B491630014758",
+            "https://api.whatsapp.com/send/?phone=491630014758",
+            "https://api.whatsapp.com/send?phone=491630014758&text=hello",
+            "https://web.whatsapp.com/send?phone=491630014758",
+            "https://wa.me/491630014758",
+            "https://wa.me/491630014758?text=hi",
+        ] {
+            assert_eq!(
+                parse_number(link, &de_br()).as_deref(),
+                Some("491630014758"),
+                "{link}"
+            );
+        }
+    }
+
+    #[test]
+    fn rejects_whatsapp_links_without_number() {
+        for link in [
+            "whatsapp://send?text=hi",
+            "https://wa.me/",
+            "https://example.com/send?phone=491630014758",
+        ] {
+            assert_eq!(parse_number(link, &de_br()), None, "{link}");
+        }
+    }
+
+    #[test]
+    fn detects_whatsapp_scheme() {
+        assert!(is_whatsapp_scheme("whatsapp://send?phone=1"));
+        assert!(!is_whatsapp_scheme("tel:+4915112345678"));
+        assert!(!is_whatsapp_scheme("https://wa.me/1"));
     }
 
     #[test]

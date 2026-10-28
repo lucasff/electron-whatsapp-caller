@@ -31,6 +31,7 @@ It opens only to start WhatsApp, then exits.
 
 1. **Open the app once** to register the protocols. It opens the settings file and exits.
 2. Set WhatsApp Caller as the default app for `tel:` / `callto:` links in your OS.
+3. Optional: it also registers `whatsapp://send?phone=…` links. If you don't use the WhatsApp desktop app, make WhatsApp Caller the handler so these links open in your chosen `handler`.
 
 The app doesn't stay running in the background. It opens only to start WhatsApp.
 
@@ -64,6 +65,10 @@ Opening the app by hand opens `config.json`:
 | `ferdium` | WhatsApp service inside [Ferdium](https://github.com/ferdium/ferdium-app) |
 
 If the chosen handler fails, the link opens in the browser.
+
+For a `whatsapp:` link, `auto` and `app` open the browser, because `whatsapp://` would reach this app again. Use `web` or `ferdium` to pick the target.
+
+`https://api.whatsapp.com/send?phone=…`, `https://web.whatsapp.com/send?phone=…` and `https://wa.me/…` links are parsed too, but the OS hands `https` links to the browser, not to this app. Route them here with a link router such as [Finicky](https://github.com/johnste/finicky), or pass them as an argument on Windows and Linux.
 
 ### Ferdium
 

@@ -186,11 +186,14 @@ fn open_in_ferdium(app: &AppHandle, ferdium: &FerdiumConfig, number: &str) -> Re
 }
 
 /// Opens a WhatsApp chat using the configured handler. Falls back to the
-/// browser when the chosen handler fails.
-pub fn open_chat(app: &AppHandle, config: &Config, number: &str) {
+/// browser when the chosen handler fails. `from_whatsapp_scheme` is set when
+/// this app received a `whatsapp:` link: opening `whatsapp://` again would
+/// reach this app, so the desktop app handlers use the browser instead.
+pub fn open_chat(app: &AppHandle, config: &Config, number: &str, from_whatsapp_scheme: bool) {
     let result = match config.handler {
         Handler::Ferdium => open_in_ferdium(app, &config.ferdium, number),
         Handler::Web => open_in_browser(app, number),
+        Handler::App | Handler::Auto if from_whatsapp_scheme => open_in_browser(app, number),
         Handler::App => open_in_desktop_app(app, number),
         Handler::Auto => open_in_desktop_app(app, number).or_else(|_| open_in_browser(app, number)),
     };
