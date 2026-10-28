@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16382B"/>
+      <stop offset="1" stop-color="#07140F"/>
+    </linearGradient>
+    <linearGradient id="gr" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5BF08F"/>
+      <stop offset="1" stop-color="#1FC463"/>
+    </linearGradient>
+    <radialGradient id="glow" cx=".3" cy=".25" r=".8">
+      <stop offset="0" stop-color="#2BE07A" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#2BE07A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="230" fill="url(#bg)"/>
+  <rect width="1024" height="1024" rx="230" fill="url(#glow)"/>
+  <!-- handset -->
+  <g fill="url(#gr)" transform="translate(470 560)">
+    <path d="M-250-150 C-250-215 -205-250 -150-250 L-95-250 C-60-250 -40-228 -40-198 L-40-150 C-40-124 -56-110 -84-102 C-96-98 -98-90 -92-76 C-60 0 0 60 76 92 C90 98 98 96 102 84 C110 56 124 40 150 40 L198 40 C228 40 250 60 250 95 L250 150 C250 205 215 250 150 250 C-66 250 -250 66 -250-150 Z"/>
+  </g>
+  <!-- signal arcs -->
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-width="40">
+    <path d="M600 292a150 150 0 0 1 132 132" opacity=".95"/>
+    <path d="M610 168a280 280 0 0 1 246 246" opacity=".6"/>
+  </g>
+</svg>
