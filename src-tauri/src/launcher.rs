@@ -1,4 +1,4 @@
-use std::{process::Command, thread, time::Duration};
+use std::{thread, time::Duration};
 
 use tauri::AppHandle;
 use tauri_plugin_opener::OpenerExt;
@@ -162,7 +162,7 @@ tell application "System Events"
   keystroke "+{number}"
 end tell"#
     );
-    let status = Command::new("osascript")
+    let status = std::process::Command::new("osascript")
         .args(["-e", &script])
         .status()
         .map_err(|e| e.to_string())?;
